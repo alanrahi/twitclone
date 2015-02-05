@@ -18,11 +18,24 @@ router.get('/login', function(req, res, next) {
 
 /* POST login page */
 router.post('/login', function(req, res, next) {
-  var user = User.exists();
-  if (user) {
-    res.cookie('logged-into-twitclone', 'true');
-    res.redirect('/');
-  }
+  User.exists(req.body.username, function(user) {
+    if (user) {
+      User.passwordIsValid(user.get('username'), req.body.password, function(valid) {
+        if (valid) {
+          res.cookie('logged-into-twitclone', 'true');
+          res.redirect('/');
+        }
+        else {res.render ('login', {title: 'Incorrect login information'}) }
+      });
+     
+    }
+    else { res.render ('login', {title: 'Incorrect login information'})
+      
+    }
+
+  });
 });
+
+
 
 module.exports = router;

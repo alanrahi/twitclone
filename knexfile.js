@@ -6,9 +6,9 @@ module.exports = {
     client: 'postgres',
     connection: {
       host : '127.0.0.1',
-      user : 'brycejohnson',
-      password : '12345',
-      database : 'twitclone'
+      user : '',
+      password : '',
+      database : 'twitclone-database'
     }
   },
 
