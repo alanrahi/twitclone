@@ -18,11 +18,21 @@ router.get('/login', function(req, res, next) {
 
 /* POST login page */
 router.post('/login', function(req, res, next) {
-  var user = User.exists();
-  if (user) {
-    res.cookie('logged-into-twitclone', 'true');
-    res.redirect('/');
-  }
+  User.exists(req.body.username, function(user){
+    if(user) {
+      User.passwordIsValid(user, req.body.password, function(valid) {
+	if(valid) {
+	  res.cookie('logged-into-twitclone', 'true');
+	  res.redirect('/');
+	} else {
+	  res.render('login', { title: 'Invalid Password!' });
+	}
+      });
+    } else {
+      res.render('login', { title: 'User does not Exist!' });
+    }
+  });
 });
+
 
 module.exports = router;
