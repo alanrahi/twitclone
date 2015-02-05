@@ -9,7 +9,7 @@
   "homepage": "https://github.com/brycewjohnson/twitclone",
   "repository": {
     "type": "git",
-    "url": "git://github.com/brycewjohnson/bluebird.git"
+    "url": "git://github.com/brycewjohnson/twitclone.git"
   },
   "license": "MIT",
   "dependencies": {
