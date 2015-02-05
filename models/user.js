@@ -1,13 +1,41 @@
 // this is the user model
 
+var env = process.env.NODE_ENV || 'development';
+var knexConfig = require('../knexfile.js')[env];
+var knex = require('knex')(knexConfig);
+var bookshelf = require('bookshelf')(knex);
+
+var User =  bookshelf.Model.extend({
+	tableName: 'users'
+});
+
+
+
+
+
 module.exports = {
 
-  create: function() {
-    return true;
+
+  passwordIsValid: function(username, password, callBack) {
+  	new User({username: username}).fetch().then(function(user) {
+  		if (user.get('password') === password) {callBack(true);}
+  			else {callBack(false);}
+  	});
+
+  },
+
+  create: function(username, password) { 
+  	return User.forge({username: username, password: password}).save().then(function() {
+  		return true;
+  	});
+    
   },
   
-  exists: function() {
-    return true;
+  exists: function(username, callBack) {
+  	new User({username: username}).fetch().then(function(user) {
+  		callBack(user);
+  	});
+    
   }
   
 };
