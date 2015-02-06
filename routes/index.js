@@ -1,19 +1,23 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
+var Post = require('../models/post');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   if (!req.cookies["logged-into-twitclone"]) {
     res.redirect('/login');
-  } else {
-    res.render('index', { title: 'Express' });
-  }
+  } else { 
+    Post.getAllPosts(function(posts) {
+      res.render('index', { title: 'TwitClone', allPosts: posts });
+    });
+   } 
+    
 });
 
 /* POST home page. */
 router.post('/', function(req, res, next) {
-  Post.create(req.body.newpost, function() {
+  Post.create(req.cookies["logged-into-twitclone"],req.body.newpost, function() {
     res.redirect('/');
   });
   
@@ -31,7 +35,7 @@ router.post('/login', function(req, res, next) {
     if (user) {
       User.passwordIsValid(user.get('username'), req.body.password, function(valid) {
         if (valid) {
-          res.cookie('logged-into-twitclone', 'true');
+          res.cookie('logged-into-twitclone', user.get('id'));
           res.redirect('/');
         }
         else {
@@ -50,8 +54,8 @@ router.get('/signup', function(req,res,next) {
 });
 
 router.post('/signup', function(req,res,next) {
-  User.create(req.body.username,req.body.password, function() {
-    res.cookie('logged-into-twitclone', 'true');
+  User.create(req.body.username,req.body.password, function(user) {
+    res.cookie('logged-into-twitclone', user.get('id'));
     res.redirect('/');
   });
 });

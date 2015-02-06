@@ -26,7 +26,7 @@ module.exports = {
 
   create: function(username, password, callBack) { 
     User.forge({username: username, password: password}).save().then(function(user) {
-      callBack();
+      callBack(user);
     });
   },
   
