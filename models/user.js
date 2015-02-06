@@ -24,11 +24,10 @@ module.exports = {
 
   },
 
-  create: function(username, password) { 
-  	return User.forge({username: username, password: password}).save().then(function() {
-  		return true;
-  	});
-    
+  create: function(username, password, callBack) { 
+    User.forge({username: username, password: password}).save().then(function(user) {
+      callBack();
+    });
   },
   
   exists: function(username, callBack) {

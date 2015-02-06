@@ -11,6 +11,15 @@ router.get('/', function(req, res, next) {
   }
 });
 
+/* POST home page. */
+router.post('/', function(req, res, next) {
+  Post.create(req.body.newpost, function() {
+    res.redirect('/');
+  });
+  
+});
+
+
 /* GET login page */
 router.get('/login', function(req, res, next) {
   res.render('login', { title: 'Login to TwitClone!' });
@@ -36,5 +45,15 @@ router.post('/login', function(req, res, next) {
   });
 });
 
+router.get('/signup', function(req,res,next) {
+  res.render('signup', { title: 'Signup for twitclone!' });
+});
+
+router.post('/signup', function(req,res,next) {
+  User.create(req.body.username,req.body.password, function() {
+    res.cookie('logged-into-twitclone', 'true');
+    res.redirect('/');
+  });
+});
 
 module.exports = router;
